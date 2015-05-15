@@ -11,6 +11,7 @@ drawModule = function() {
   var cellSideLength = null;
   var gField = null;
   var gMowers = null;
+  var tooltip = null;
 
   // points in a cell
   var north = null;
@@ -30,7 +31,7 @@ drawModule = function() {
   var drawBorders = function() {
     svg = d3.select("#svg-container").append("svg")
     .attr("width", maxWidth)
-    .attr("height", maxHeight)
+    .attr("height", maxWidth)
     .style("border", "1px solid black");
   }
 
@@ -109,7 +110,10 @@ drawModule = function() {
     east = scaledPoint(1, 0.5);
     south = scaledPoint(0.5, 1);
     west = scaledPoint(0, 0.5);
-
+    
+    tooltip = d3.select("body").append("div")   
+      .attr("class", "tooltip")               
+      .style("opacity", 0);
   };
 
   var initSlider = function() {
@@ -138,11 +142,36 @@ drawModule = function() {
         gField.append("rect")
           .attr("x", xScale(i))
           .attr("y", yScale(j))
+          .attr("coord", "(" + i + "," + j + ")")
           .attr("width", cellSideLength)
           .attr("height", cellSideLength)
           .attr("fill", "#66CC66")
           .attr("stroke-width", 1)
-          .attr("stroke", 'black');
+          .attr("stroke", 'black')
+          .on("mouseover", function() {
+            var that = d3.select(this);
+            var absoluteMousePos = d3.mouse(d3.select('body').node());
+            tooltip
+              .html(that.attr("coord"))
+              .style({
+                opacity: .9,
+                left: (absoluteMousePos[0] + 30)+'px',
+                top: (absoluteMousePos[1])+'px'
+              });  
+            that.attr("fill", "#9fdf9f");
+           })
+           .on('mousemove', function() {
+              var absoluteMousePos = d3.mouse(d3.select('body').node());
+              tooltip.style({
+                left: (absoluteMousePos[0] + 30)+'px',
+                top: (absoluteMousePos[1])+'px'
+              });
+           })
+          .on("mouseout", function() {
+            var that = d3.select(this);
+            tooltip.style("opacity", 0);
+            that.attr("fill", "#66CC66");
+          });
       }
     }
   };
@@ -159,10 +188,37 @@ drawModule = function() {
     mowersGroup.exit().remove();
 
     // enter
-    var mowersGroupEnter = mowersGroup.enter().append("g");
+    var mowersGroupEnter = mowersGroup.enter().append("g")
+      .on("mouseover", function() {
+         var that = d3.select(this);
+         var absoluteMousePos = d3.mouse(d3.select('body').node());
+         tooltip
+           .html(that.attr("representation"))
+           .style({
+             opacity: .9,
+             left: (absoluteMousePos[0] + 30)+'px',
+             top: (absoluteMousePos[1])+'px'
+           });  
+         that.selectAll("rect").attr("fill", "#ff6767");
+        })
+        .on('mousemove', function() {
+           var absoluteMousePos = d3.mouse(d3.select('body').node());
+           tooltip.style({
+             left: (absoluteMousePos[0] + 30)+'px',
+             top: (absoluteMousePos[1])+'px'
+           });
+        })
+       .on("mouseout", function() {
+         var that = d3.select(this);
+         tooltip.style("opacity", 0);
+         that.selectAll("rect").attr("fill", "red");
+       });
 
     // update
-    mowersGroup.transition().attr(
+    mowersGroup
+      .attr("representation", function(d) {return "(" + d.coordinate.x + "," + d.coordinate.y + "," + d.direction.charAt(0) + ")";})
+      .transition()
+      .attr(
         "transform",
         function(mower) {
           return "translate(" + xScale(mower.coordinate.x) + ","
