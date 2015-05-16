@@ -56,13 +56,14 @@ public final class InputParser {
       Mower mower = new Mower(id, x, y, directionRepresentation);
       id++;
       // the commands
-      String commandRepresentations = safeNext(input, REGEX_COMMANDS);
       List<Command> commands = new ArrayList<Command>();
-      for (int i = 0; i < commandRepresentations.length(); i++) {
-        String commandRepresentation = Character.toString(commandRepresentations.charAt(i));
-        commands.add(Command.findByRepresentation(commandRepresentation));
+      if (input.hasNext(REGEX_COMMANDS)) {
+        String commandRepresentations = safeNext(input, REGEX_COMMANDS);
+        for (int i = 0; i < commandRepresentations.length(); i++) {
+          String commandRepresentation = Character.toString(commandRepresentations.charAt(i));
+          commands.add(Command.findByRepresentation(commandRepresentation));
+        }
       }
-
       mowersAndCommands.add(Pair.of(mower, commands));
     }
 
