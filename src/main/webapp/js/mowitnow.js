@@ -2,10 +2,10 @@ drawModule = function() {
 
   var solution = null;
   var svg = null;
-  var width = null;
-  var height = null;
-  var maxWidth = 450;
-  var maxHeight = 650;
+  var width = 400;
+  var height = 400;
+  var maxWidth = 400;
+  var maxHeight = 500;
   var xScale = null;
   var yScale = null;
   var cellSideLength = null;
@@ -28,33 +28,67 @@ drawModule = function() {
     return toString;
   };
   
-  var drawBorders = function() {
+  var drawEmpty = function() {
     svg = d3.select("#svg-container").append("svg")
-    .attr("width", maxWidth)
-    .attr("height", maxWidth)
-    .style("border", "1px solid black");
+      .attr("id", "svg")
+      .attr("width", 400)
+      .attr("height", 400)
+      .attr("viewBox", "0 0 " + width + " " + height + "")
+      .attr("preserveAspectRatio","xMinYMin")
+      .style('border', '1px solid darkgrey');
+    
+    svg.append("g").append("rect")
+    .attr("x", 0)
+    .attr("y", 0)
+    .attr("width", width)
+    .attr("height", height)
+    .attr("fill", "#fff");
+    
+    makeResponsive();   
   }
 
   var drawSolution = function(solutionJson) {
     solution = JSON.parse(solutionJson);
-    if (!(solution.hasOwnProperty("width"))) {
-      // error
-      $("#output").text(solution);
+    if (solution.hasOwnProperty("error")) {
+      $("#output").text(solution.error);
     } else {
       draw();
       addToOutput();
     }
   };
   
-  var addToOutput = function() {
-    $("#output").text(solution.finalSolution);
-  };
-
   var draw = function() {
+    initScales();
     initSvg();
     initSlider();
+    makeResponsive();
     drawField();
     drawMowersSequence();
+  };
+  
+  var makeResponsive = function() {
+    var $svg = $("#svg");
+    var $slider = $("#slider-container");    
+    $(window).on("resize", function() {
+      var targetWidth = $svg.parent().width();
+      // if it's too big
+      var targetHeight = targetWidth * height / width;
+      
+      if (targetHeight > maxHeight) {
+        targetHeight = maxHeight
+        targetWidth = targetHeight * width / height;
+      }
+      $svg
+        .attr("width", targetWidth)
+        .attr("height",targetHeight);
+      $slider.css("width", targetWidth);
+    });
+    
+    $(window).trigger("resize");
+  };
+  
+  var addToOutput = function() {
+    $("#output").text(solution.finalSolution);
   };
 
   var drawMowersSequence = function() {
@@ -73,8 +107,8 @@ drawModule = function() {
       }, 250);
     })();
   };
-
-  var initSvg = function() {
+  
+  var initScales = function() {
     // we only use the width because we don't mind scrolling vertically but
     // not horizontally and we want squares
     xScale = d3.scale.linear().domain([ 0, solution.width + 1 ]).range(
@@ -93,45 +127,64 @@ drawModule = function() {
     yScale = d3.scale.linear().domain([ -1, solution.height ]).range(
         [ height, 0 ]);
     
-    $("#svg-container").empty();
-
-    svg = d3.select("#svg-container").append("svg")
-      .attr("width", width)
-      .attr("height", height)
-      .style("border", "1px solid black");
-
-    gField = svg.append("g").attr("id", "gField");
-
-    gMowers = svg.append("g").attr("id", "gMowers");
-
     cellSideLength = xScale(1);
 
     north = scaledPoint(0.5, 0);
     east = scaledPoint(1, 0.5);
     south = scaledPoint(0.5, 1);
     west = scaledPoint(0, 0.5);
+  };
+
+  var initSvg = function() {
+
+    $("#svg-container").empty();
+    
+    svg = d3.select("#svg-container").append("svg")
+      .attr("id", "svg")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("viewBox", "0 0 " + width + " " + height + "")
+      .attr("preserveAspectRatio","xMinYMin");
+
+    gField = svg.append("g").attr("id", "gField");
+
+    gMowers = svg.append("g").attr("id", "gMowers");
+    
+    // borders
+    svg.append("rect")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("width", width)
+      .attr("height", height)
+      .attr("fill", "none")
+      .attr("stroke-width", 3)
+      .attr("stroke", 'black');
     
     tooltip = d3.select("body").append("div")   
       .attr("class", "tooltip")               
       .style("opacity", 0);
+    
   };
 
   var initSlider = function() {
-    $("#slider-container").slider({
-      value : 0,
-      min : 0,
-      max : solution.mowersAtStep.length - 1,
-      step : 1,
-      width : width,
-      // we have to attach this event to trigger it manually
-      // (because of a bug in jquery-ui)
-      change : function(event, ui) {
-        drawMowers(ui.value);
-      },
-      slide : function(event, ui) {
-        drawMowers(ui.value);
-      }
-    });
+    $("#slider-container")
+      .slider({
+        value : 0,
+        min : 0,
+        max : solution.mowersAtStep.length - 1,
+        step : 1,
+        width : width,
+        // we have to attach this event to trigger it manually
+        // (because of a bug in jquery-ui)
+        change : function(event, ui) {
+          drawMowers(ui.value);
+        },
+        slide : function(event, ui) {
+          drawMowers(ui.value);
+        }
+      })
+     .css("width", width);
+    
   };
 
   var drawField = function() {
@@ -273,7 +326,7 @@ drawModule = function() {
   };
 
   return {
-    drawBorders : drawBorders,
+    drawEmpty : drawEmpty,
     drawSolution : drawSolution
   };
 
@@ -320,5 +373,5 @@ ajaxModule = function() {
 
 $(function() {
   ajaxModule.init();
-  drawModule.drawBorders();
+  drawModule.drawEmpty();
 });

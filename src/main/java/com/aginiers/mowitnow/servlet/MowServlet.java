@@ -13,7 +13,6 @@ import com.aginiers.mowitnow.core.Solution;
 import com.aginiers.mowitnow.core.SolutionComputer;
 import com.aginiers.mowitnow.core.parser.InputParserException;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 @WebServlet("/Mow")
 public class MowServlet extends HttpServlet {
@@ -40,10 +39,10 @@ public class MowServlet extends HttpServlet {
       response.getWriter().write(new Gson().toJson(solution));
     } catch (InputParserException e) {
       e.printStackTrace();
-      response.getWriter().write(new Gson().toJson(e.getMessage()));
+      response.getWriter().write(new Gson().toJson(new ErrorJson(e.getMessage())));
     } catch (IllegalParameterException e) {
       e.printStackTrace();
-      response.getWriter().write(new Gson().toJson(e.getMessage()));
+      response.getWriter().write(new Gson().toJson(new ErrorJson(e.getMessage())));
     } 
   }
   

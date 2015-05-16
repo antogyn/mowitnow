@@ -2,7 +2,8 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>mowit</title>
+<title>MowItNow</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="css/mowitnow.css" />
 <script charset="utf-8" src="js/d3.js"></script>
@@ -14,25 +15,48 @@
 </head>
 <body>
 
-<div id="input-container">
-  <p>
-    Input :
-  </p>
-  <textarea id="input" rows="15" cols="30"></textarea>
-  <br/>
-  <button id="button-input">Send</button>
-</div>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">MowItNow</a>
+    </div>
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="#">Rules</a></li>
+      <li><a id="last-nav" href="https://github.com/antogyn/mowitnow">GitHub</a></li>
+    </ul>
+  </div><!-- /.container-fluid -->
+</nav>
 
-<div id="output-container">
-  <p>
-    Output :
-  </p>
-  <textarea id="output" rows="15" cols="30"></textarea>
-</div>
-
-<div id="representation">
-  <div id="svg-container"></div>
-  <div id="slider-container"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-xs-5">
+      <div id="input-container">
+        <label for="input">Input:</label>
+        <textarea id="input" rows="12"></textarea>
+        <br/>
+        <div id="button-input-container">
+          <button type="button" class="btn btn-primary" id="button-input" style="float: right;">Submit</button>
+        </div>
+      </div>
+      
+      <div style="clear: both;"></div>
+  
+      <div id="output-container">
+        <label for="output">Output:</label>
+        <textarea id="output" rows="6" readonly="readonly"></textarea>
+      </div>
+    </div>
+  
+    <div class="col-xs-7">
+      <div id="representation">
+        <div id="svg-container"></div>
+        <div id="slider-container"></div>
+      </div>
+    </div>
+  
+  </div>
 </div>
 
 </body>
