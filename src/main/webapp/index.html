@@ -9,55 +9,130 @@
 <script charset="utf-8" src="js/d3.js"></script>
 <script charset="utf-8" src="js/jquery-2.1.1.js"></script>
 <script charset="utf-8" src="js/jquery-ui.js"></script>
-
-<script charset="utf-8" type="application/javascript" src="js/mowitnow.js"></script>
+<script charset="utf-8" type="application/javascript"
+  src="js/bootstrap.min.js"></script>
+<script charset="utf-8" type="application/javascript"
+  src="js/mowitnow.js"></script>
 
 </head>
 <body>
 
-<nav class="navbar navbar-default">
-  <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">MowItNow</a>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">MowItNow</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="#" data-toggle="modal" data-target="#myModal">Instructions</a></li>
+        <li><a id="last-nav"
+          href="https://github.com/antogyn/mowitnow" target="_blank">GitHub</a></li>
+      </ul>
     </div>
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <ul class="nav navbar-nav navbar-right">
-      <li><a href="#">Rules</a></li>
-      <li><a id="last-nav" href="https://github.com/antogyn/mowitnow">GitHub</a></li>
-    </ul>
-  </div><!-- /.container-fluid -->
-</nav>
+    <!-- /.container-fluid -->
+  </nav>
 
-<div class="container">
-  <div class="row">
-    <div class="col-xs-5">
-      <div id="input-container">
-        <label for="input">Input:</label>
-        <textarea id="input" rows="12"></textarea>
-        <br/>
-        <div id="button-input-container">
-          <button type="button" class="btn btn-primary" id="button-input" style="float: right;">Submit</button>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-5">
+        <div id="input-container">
+          <label for="input">Input:</label>
+          <textarea id="input" rows="12"></textarea>
+          <br />
+          <div id="button-input-container">
+            <button type="button" class="btn btn-primary"
+              id="button-input" style="float: right;">Submit</button>
+          </div>
+        </div>
+
+        <div style="clear: both;"></div>
+
+        <div id="output-container">
+          <label for="output">Output:</label>
+          <textarea id="output" rows="6" readonly="readonly"></textarea>
         </div>
       </div>
-      
-      <div style="clear: both;"></div>
-  
-      <div id="output-container">
-        <label for="output">Output:</label>
-        <textarea id="output" rows="6" readonly="readonly"></textarea>
+
+      <div class="col-xs-7">
+        <div id="representation">
+          <div id="svg-container"></div>
+          <div id="slider-container"></div>
+        </div>
       </div>
+
     </div>
-  
-    <div class="col-xs-7">
-      <div id="representation">
-        <div id="svg-container"></div>
-        <div id="slider-container"></div>
-      </div>
-    </div>
-  
   </div>
-</div>
+
+  <!-- Instructions -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+    aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!--         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
+          <h4 class="modal-title" id="myModalLabel">Instructions</h4>
+        </div>
+        <div class="modal-body">
+          <p>La société MowItNow a décidé de développer une tondeuse
+            à gazon automatique, destinée aux surfaces rectangulaires.</p>
+          <p>La tondeuse peut être programmée pour parcourir
+            l'intégralité de la surface.</p>
+          <p>La position de la tondeuse est représentée par une
+            combinaison de coordonnées (x,y) et d'une lettre indiquant
+            l'orientation selon la notation cardinale anglaise
+            (N,E,W,S).</p>
+          <p>La pelouse est divisée en grille pour simplifier la
+            navigation.</p>
+          <p>Par exemple, la position de la tondeuse peut être « 0,
+            0, N », ce qui signifie qu'elle se situe dans le coin
+            inférieur gauche de la pelouse, et orientée vers le Nord.</p>
+          <p>Pour contrôler la tondeuse, on lui envoie une séquence
+            simple de lettres. Les lettres possibles sont « D », « G »
+            et « A ». « D » et « G » font pivoter la tondeuse de 90° à
+            droite ou à gauche respectivement, sans la déplacer. « A »
+            signifie que l'on avance la tondeuse d'une case dans la
+            direction à laquelle elle fait face, et sans modifier son
+            orientation. Si la position après mouvement est en dehors de
+            la pelouse, la tondeuse ne bouge pas, conserve son
+            orientation et traite la commande suivante.</p>
+          <p>On assume que la case directement au Nord de la
+            position (x, y) a pour coordonnées (x, y+1).</p>
+          <p>Pour programmer la tondeuse, on lui fournit un fichier
+            d'entrée construit comme suit :
+            <ul>
+              <li>La première ligne correspond aux coordonnées du
+                coin supérieur droit de la pelouse, celles du coin
+                inférieur gauche sont supposées être (0,0)</li>
+              <li>La suite du fichier permet de piloter toutes les
+                tondeuses qui ont été déployées. Chaque tondeuse a deux
+                lignes la concernant :
+                <ul>
+                  <li>la première ligne donne la position initiale de
+                    la tondeuse, ainsi que son orientation. La position et
+                    l'orientation sont fournies sous la forme de 2
+                    chiffres et une lettre, séparés par un espace</li>
+                  <li>la seconde ligne est une série d'instructions
+                    ordonnant à la tondeuse d'explorer la pelouse. Les
+                    instructions sont une suite de caractères sans
+                    espaces. Chaque tondeuse se déplace de façon
+                    séquentielle, ce qui signifie que la seconde tondeuse
+                    ne bouge que lorsque la première a exécuté
+                    intégralement sa série d'instructions. Lorsqu'une
+                    tondeuse achève une série d'instruction, elle
+                    communique sa position et son orientation.</li>
+                </ul>
+              </li>
+            </ul>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default"
+            data-dismiss="modal">OK</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
