@@ -2,26 +2,28 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>MowItNow</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css" href="css/jquery-ui.theme.min.css" />
 <link rel="stylesheet" type="text/css" href="css/mowitnow.css" />
-<script charset="utf-8" src="js/d3.js"></script>
+<script charset="utf-8" src="js/d3.min.js"></script>
 <script charset="utf-8" src="js/jquery-2.1.1.js"></script>
-<script charset="utf-8" src="js/jquery-ui.js"></script>
+<script charset="utf-8" src="js/jquery-ui.min.js"></script>
 <script charset="utf-8" type="application/javascript"
   src="js/bootstrap.min.js"></script>
 <script charset="utf-8" type="application/javascript"
   src="js/mowitnow.js"></script>
-
 </head>
 <body>
 
-  <nav class="navbar navbar-default">
+  <nav class="navbar navbar-default navbar-static-top">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">MowItNow</a>
+        <a class="navbar-brand" href="/mowitnow/">MowItNow</a>
       </div>
       <!-- Collect the nav links, forms, and other content for toggling -->
       <ul class="nav navbar-nav navbar-right">
@@ -38,11 +40,10 @@
       <div class="col-xs-5">
         <div id="input-container">
           <label for="input">Input:</label>
-          <textarea id="input" rows="12"></textarea>
-          <br />
+          <textarea id="input" rows="9"></textarea>
           <div id="button-input-container">
             <button type="button" class="btn btn-primary"
-              id="button-input" style="float: right;">Submit</button>
+              id="button-input" style="width: 100%;">Go !</button>
           </div>
         </div>
 
@@ -50,7 +51,7 @@
 
         <div id="output-container">
           <label for="output">Output:</label>
-          <textarea id="output" rows="6" readonly="readonly"></textarea>
+          <textarea id="output" rows="4" readonly="readonly"></textarea>
         </div>
       </div>
 
@@ -70,8 +71,11 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <!--         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button> -->
-          <h4 class="modal-title" id="myModalLabel">Instructions</h4>
+          <button type="button" class="close" data-dismiss="modal"
+            aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title" id="myModalLabel">Instructions (French)</h4>
         </div>
         <div class="modal-body">
           <p>La société MowItNow a décidé de développer une tondeuse
@@ -100,30 +104,30 @@
             position (x, y) a pour coordonnées (x, y+1).</p>
           <p>Pour programmer la tondeuse, on lui fournit un fichier
             d'entrée construit comme suit :
-            <ul>
-              <li>La première ligne correspond aux coordonnées du
-                coin supérieur droit de la pelouse, celles du coin
-                inférieur gauche sont supposées être (0,0)</li>
-              <li>La suite du fichier permet de piloter toutes les
-                tondeuses qui ont été déployées. Chaque tondeuse a deux
-                lignes la concernant :
-                <ul>
-                  <li>la première ligne donne la position initiale de
-                    la tondeuse, ainsi que son orientation. La position et
-                    l'orientation sont fournies sous la forme de 2
-                    chiffres et une lettre, séparés par un espace</li>
-                  <li>la seconde ligne est une série d'instructions
-                    ordonnant à la tondeuse d'explorer la pelouse. Les
-                    instructions sont une suite de caractères sans
-                    espaces. Chaque tondeuse se déplace de façon
-                    séquentielle, ce qui signifie que la seconde tondeuse
-                    ne bouge que lorsque la première a exécuté
-                    intégralement sa série d'instructions. Lorsqu'une
-                    tondeuse achève une série d'instruction, elle
-                    communique sa position et son orientation.</li>
-                </ul>
-              </li>
-            </ul>
+          <ul>
+            <li>La première ligne correspond aux coordonnées du
+              coin supérieur droit de la pelouse, celles du coin
+              inférieur gauche sont supposées être (0,0)</li>
+            <li>La suite du fichier permet de piloter toutes les
+              tondeuses qui ont été déployées. Chaque tondeuse a deux
+              lignes la concernant :
+              <ul>
+                <li>la première ligne donne la position initiale de
+                  la tondeuse, ainsi que son orientation. La position et
+                  l'orientation sont fournies sous la forme de 2
+                  chiffres et une lettre, séparés par un espace</li>
+                <li>la seconde ligne est une série d'instructions
+                  ordonnant à la tondeuse d'explorer la pelouse. Les
+                  instructions sont une suite de caractères sans
+                  espaces. Chaque tondeuse se déplace de façon
+                  séquentielle, ce qui signifie que la seconde tondeuse
+                  ne bouge que lorsque la première a exécuté
+                  intégralement sa série d'instructions. Lorsqu'une
+                  tondeuse achève une série d'instruction, elle
+                  communique sa position et son orientation.</li>
+              </ul>
+            </li>
+          </ul>
           </p>
         </div>
         <div class="modal-footer">
