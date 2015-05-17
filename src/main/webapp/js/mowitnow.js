@@ -60,7 +60,6 @@ drawModule = function() {
   var draw = function() {
     initScales();
     initSvg();
-    initControls();
     makeResponsive();
     drawField();
     drawMowersSequence();
@@ -93,8 +92,10 @@ drawModule = function() {
 
   var drawMowersSequence = function() {
     $slider = $('#slider-container');
-    $slider.slider('value', 0);
-//    $slider.trigger('slidechange');
+    
+    $slider.slider('option', 'max', solution.mowersAtStep.length - 1);
+    
+    $slider.slider('value', 0);  
     var i = 1;
     (function nextStep() {
       setTimeout(function() {
@@ -172,7 +173,7 @@ drawModule = function() {
       .slider({
         value : 0,
         min : 0,
-        max : solution.mowersAtStep.length - 1,
+        max : 1,
         step : 1,
         // we have to attach this event to trigger it manually
         change : function(event, ui) {
@@ -333,7 +334,8 @@ drawModule = function() {
 
   return {
     drawEmpty : drawEmpty,
-    drawSolution : drawSolution
+    drawSolution : drawSolution,
+    initControls : initControls
   };
 
 }();
@@ -379,5 +381,6 @@ ajaxModule = function() {
 
 $(function() {
   ajaxModule.init();
+  drawModule.initControls();
   drawModule.drawEmpty();
 });
