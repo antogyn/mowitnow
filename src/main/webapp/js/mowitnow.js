@@ -23,34 +23,34 @@ drawModule = function() {
     var x = cellSideLength * px;
     var y = cellSideLength * py;
     var toString = function() {
-      return (x + "," + y);
+      return (x + ',' + y);
     };
     return toString;
   };
   
   var drawEmpty = function() {
-    svg = d3.select("#svg-container").append("svg")
-      .attr("id", "svg")
-      .attr("width", 400)
-      .attr("height", 400)
-      .attr("viewBox", "0 0 " + width + " " + height + "")
-      .attr("preserveAspectRatio","xMinYMin")
+    svg = d3.select('#svg-container').append('svg')
+      .attr('id', 'svg')
+      .attr('width', 400)
+      .attr('height', 400)
+      .attr('viewBox', '0 0 ' + width + ' ' + height + '')
+      .attr('preserveAspectRatio','xMinYMin')
       .style('border', '1px solid darkgrey');
     
-    svg.append("g").append("rect")
-    .attr("x", 0)
-    .attr("y", 0)
-    .attr("width", width)
-    .attr("height", height)
-    .attr("fill", "#fff");
+    svg.append('g').append('rect')
+    .attr('x', 0)
+    .attr('y', 0)
+    .attr('width', width)
+    .attr('height', height)
+    .attr('fill', '#fff');
     
     makeResponsive();   
   }
 
   var drawSolution = function(solutionJson) {
     solution = JSON.parse(solutionJson);
-    if (solution.hasOwnProperty("error")) {
-      $("#output").text(solution.error);
+    if (solution.hasOwnProperty('error')) {
+      $('#output').text(solution.error);
     } else {
       draw();
       addToOutput();
@@ -67,9 +67,9 @@ drawModule = function() {
   };
   
   var makeResponsive = function() {
-    var $svg = $("#svg");
-    var $controls = $("#controls");    
-    $(window).on("resize", function() {
+    var $svg = $('#svg');
+    var $controls = $('#controls');    
+    $(window).on('resize', function() {
       var targetWidth = $svg.parent().width();
       // if it's too big
       var targetHeight = targetWidth * height / width;
@@ -79,27 +79,27 @@ drawModule = function() {
         targetWidth = targetHeight * width / height;
       }
       $svg
-        .attr("width", targetWidth)
-        .attr("height",targetHeight);
-      $controls.css("width", targetWidth);
+        .attr('width', targetWidth)
+        .attr('height',targetHeight);
+      $controls.css('width', targetWidth);
     });
     
-    $(window).trigger("resize");
+    $(window).trigger('resize');
   };
   
   var addToOutput = function() {
-    $("#output").text(solution.finalSolution);
+    $('#output').text(solution.finalSolution);
   };
 
   var drawMowersSequence = function() {
     $slider = $('#slider-container');
-    $slider.slider("value", 0);
-//    $slider.trigger("slidechange");
+    $slider.slider('value', 0);
+//    $slider.trigger('slidechange');
     var i = 1;
     (function nextStep() {
       setTimeout(function() {
         if (i <= solution.mowersAtStep.length - 1) {
-          $slider.slider("value", i);
+          $slider.slider('value', i);
           i++;
           nextStep();
         }
@@ -136,37 +136,37 @@ drawModule = function() {
 
   var initSvg = function() {
 
-    $("#svg-container").empty();
+    $('#svg-container').empty();
     
-    svg = d3.select("#svg-container").append("svg")
-      .attr("id", "svg")
-      .attr("width", width)
-      .attr("height", height)
-      .attr("viewBox", "0 0 " + width + " " + height + "")
-      .attr("preserveAspectRatio","xMinYMin");
+    svg = d3.select('#svg-container').append('svg')
+      .attr('id', 'svg')
+      .attr('width', width)
+      .attr('height', height)
+      .attr('viewBox', '0 0 ' + width + ' ' + height + '')
+      .attr('preserveAspectRatio','xMinYMin');
 
-    gField = svg.append("g").attr("id", "gField");
+    gField = svg.append('g').attr('id', 'gField');
 
-    gMowers = svg.append("g").attr("id", "gMowers");
+    gMowers = svg.append('g').attr('id', 'gMowers');
     
     // borders
-    svg.append("rect")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("width", width)
-      .attr("height", height)
-      .attr("fill", "none")
-      .attr("stroke-width", 3)
-      .attr("stroke", 'black');
+    svg.append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', width)
+      .attr('height', height)
+      .attr('fill', 'none')
+      .attr('stroke-width', 3)
+      .attr('stroke', 'black');
     
-    tooltip = d3.select("body").append("div")   
-      .attr("class", "tooltip")               
-      .style("opacity", 0);
+    tooltip = d3.select('body').append('div')   
+      .attr('class', 'tooltip')               
+      .style('opacity', 0);
     
   };
 
   var initControls = function() {
-    var $slider = $("#slider-container");
+    var $slider = $('#slider-container');
     
     $slider
       .slider({
@@ -183,12 +183,12 @@ drawModule = function() {
         }
      });
     
-    $("#minus").click(function() {
-      $slider.slider( "value", $slider.slider("value") - 1 );
+    $('#minus').click(function() {
+      $slider.slider( 'value', $slider.slider('value') - 1 );
     })
     
-    $("#plus").click(function() {
-      $slider.slider( "value", $slider.slider("value") + 1 );
+    $('#plus').click(function() {
+      $slider.slider( 'value', $slider.slider('value') + 1 );
     })
     
   };
@@ -198,26 +198,26 @@ drawModule = function() {
     for (var i = 0; i <= solution.width; i++) {
       for (var j = 0; j <= solution.height; j++) {
         // it's useless to bind the field since it won't change
-        gField.append("rect")
-          .attr("x", xScale(i))
-          .attr("y", yScale(j))
-          .attr("coord", "(" + i + "," + j + ")")
-          .attr("width", cellSideLength)
-          .attr("height", cellSideLength)
-          .attr("fill", "#66CC66")
-          .attr("stroke-width", 1)
-          .attr("stroke", 'black')
-          .on("mouseover", function() {
+        gField.append('rect')
+          .attr('x', xScale(i))
+          .attr('y', yScale(j))
+          .attr('coord', '(' + i + ',' + j + ')')
+          .attr('width', cellSideLength)
+          .attr('height', cellSideLength)
+          .attr('fill', '#66CC66')
+          .attr('stroke-width', 1)
+          .attr('stroke', 'black')
+          .on('mouseover', function() {
             var that = d3.select(this);
             var absoluteMousePos = d3.mouse(d3.select('body').node());
             tooltip
-              .html(that.attr("coord"))
+              .html(that.attr('coord'))
               .style({
                 opacity: .9,
                 left: (absoluteMousePos[0] + 30)+'px',
                 top: (absoluteMousePos[1])+'px'
               });  
-            that.attr("fill", "#9fdf9f");
+            that.attr('fill', '#9fdf9f');
            })
            .on('mousemove', function() {
               var absoluteMousePos = d3.mouse(d3.select('body').node());
@@ -226,10 +226,10 @@ drawModule = function() {
                 top: (absoluteMousePos[1])+'px'
               });
            })
-          .on("mouseout", function() {
+          .on('mouseout', function() {
             var that = d3.select(this);
-            tooltip.style("opacity", 0);
-            that.attr("fill", "#66CC66");
+            tooltip.style('opacity', 0);
+            that.attr('fill', '#66CC66');
           });
       }
     }
@@ -239,7 +239,7 @@ drawModule = function() {
 
     mowers = solution.mowersAtStep[step];
 
-    var mowersGroup = gMowers.selectAll("g").data(mowers, function(mower) {
+    var mowersGroup = gMowers.selectAll('g').data(mowers, function(mower) {
       return mower.id;
     });
 
@@ -247,18 +247,18 @@ drawModule = function() {
     mowersGroup.exit().remove();
 
     // enter
-    var mowersGroupEnter = mowersGroup.enter().append("g")
-      .on("mouseover", function() {
+    var mowersGroupEnter = mowersGroup.enter().append('g')
+      .on('mouseover', function() {
          var that = d3.select(this);
          var absoluteMousePos = d3.mouse(d3.select('body').node());
          tooltip
-           .html(that.attr("representation"))
+           .html(that.attr('representation'))
            .style({
              opacity: .9,
              left: (absoluteMousePos[0] + 30)+'px',
              top: (absoluteMousePos[1])+'px'
            });  
-         that.selectAll("rect").attr("fill", "#ff6767");
+         that.selectAll('rect').attr('fill', '#ff6767');
         })
         .on('mousemove', function() {
            var absoluteMousePos = d3.mouse(d3.select('body').node());
@@ -267,45 +267,45 @@ drawModule = function() {
              top: (absoluteMousePos[1])+'px'
            });
         })
-       .on("mouseout", function() {
+       .on('mouseout', function() {
          var that = d3.select(this);
-         tooltip.style("opacity", 0);
-         that.selectAll("rect").attr("fill", "red");
+         tooltip.style('opacity', 0);
+         that.selectAll('rect').attr('fill', 'red');
        });
 
     // update
     mowersGroup
-      .attr("representation", function(d) {return "(" + d.coordinate.x + "," + d.coordinate.y + "," + d.direction.charAt(0) + ")";})
+      .attr('representation', function(d) {return '(' + d.coordinate.x + ',' + d.coordinate.y + ',' + d.direction.charAt(0) + ')';})
       .transition()
       .attr(
-        "transform",
+        'transform',
         function(mower) {
-          return "translate(" + xScale(mower.coordinate.x) + ","
-              + yScale(mower.coordinate.y) + ")";
+          return 'translate(' + xScale(mower.coordinate.x) + ','
+              + yScale(mower.coordinate.y) + ')';
         });
 
     // enter
-    mowersGroupEnter.append("rect")
+    mowersGroupEnter.append('rect')
       .attr('x', 0)
       .attr('y', 0)
       .attr('width', cellSideLength)
       .attr('height', cellSideLength)
-      .attr("fill", "red")
+      .attr('fill', 'red')
       .attr('stroke-width', 1)
       .attr('stroke', 'black');
 
     // enter
-    mowersGroupEnter.append("polygon")
-      .style("stroke", "black")
-      .style("fill", "none");
+    mowersGroupEnter.append('polygon')
+      .style('stroke', 'black')
+      .style('fill', 'none');
 
     // update
-    mowersGroup.select("polygon")
+    mowersGroup.select('polygon')
       .datum(function(mower) {
         return mower;
       })
       .transition()
-      .attr("points", function(mower) {
+      .attr('points', function(mower) {
         return getTriangleFromDirection(mower.direction);
       });
 
@@ -313,20 +313,20 @@ drawModule = function() {
 
   var getTriangleFromDirection = function(direction) {
     switch (direction) {
-    case "NORTH":
-      return west() + "," + north() + "," + east();
+    case 'NORTH':
+      return west() + ',' + north() + ',' + east();
       break;
-    case "EAST":
-      return north() + "," + east() + "," + south();
+    case 'EAST':
+      return north() + ',' + east() + ',' + south();
       break;
-    case "SOUTH":
-      return east() + "," + south() + "," + west();
+    case 'SOUTH':
+      return east() + ',' + south() + ',' + west();
       break;
-    case "WEST":
-      return south() + "," + west() + "," + north();
+    case 'WEST':
+      return south() + ',' + west() + ',' + north();
       break;
     default:
-      return "error";
+      return 'error';
       break;
     }
   };
@@ -341,23 +341,23 @@ drawModule = function() {
 ajaxModule = function() {
   
   var init = function() {
-    $("#button-input").click(function() {
-      postInput($("#input").val());
+    $('#button-input').click(function() {
+      postInput($('#input').val());
     });
-    $("#input").text(
-          "5 5\n"
-        + "1 2 N\n"
-        + "GAGAGAGAA\n"
-        + "3 3 E\n"
-        + "AADAADADDA"
+    $('#input').text(
+          '5 5\n'
+        + '1 2 N\n'
+        + 'GAGAGAGAA\n'
+        + '3 3 E\n'
+        + 'AADAADADDA'
     );
   };
   
   var postInput = function(input) {
-    var input = $("#input").val();
+    var input = $('#input').val();
     $.ajax({
-      url: "./Mow",
-      type: "POST",
+      url: './Mow',
+      type: 'POST',
       data: {
           input: input
       },
@@ -366,7 +366,7 @@ ajaxModule = function() {
         drawModule.drawSolution(json);
       },
       error: function(e) {
-        $("#output").text("An unexpected error occured : " + e.message);
+        $('#output').text('An unexpected error occured : ' + e.message);
       }
     });
   };
