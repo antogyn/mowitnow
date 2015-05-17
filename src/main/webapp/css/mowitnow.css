@@ -46,6 +46,10 @@ svg {
   padding-right: 30px;
 }
 
+#button-input  {
+  width: 100%;
+}
+
 #minus-plus-container {
   margin-top: 4px;
   width: 100%;
