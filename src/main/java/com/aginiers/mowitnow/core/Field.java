@@ -77,6 +77,10 @@ public class Field {
     }
     return mowers;
   }
+  
+  List<Mower> getMowers() {
+    return mowers;
+  }
 
   public int getWidth() {
     return width;

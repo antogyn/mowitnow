@@ -4,6 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+/**
+ * Tests for the Mower class.
+ * 
+ * @author aginiers
+ *
+ */
 public class MowerTest {
 
   @Test(expected = IllegalParameterException.class)

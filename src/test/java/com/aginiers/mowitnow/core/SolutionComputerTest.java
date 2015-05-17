@@ -6,6 +6,14 @@ import org.junit.Test;
 
 import com.aginiers.mowitnow.core.parser.InputParserException;
 
+/**
+ * Tests for the whole solution.
+ * 
+ * Depends on the rest of the classes.
+ * 
+ * @author aginiers
+ *
+ */
 public class SolutionComputerTest {
 
   @Test
@@ -28,4 +36,24 @@ public class SolutionComputerTest {
 
     assertEquals(expectedOutput, output);
   }
+  
+  @Test
+  public void inputWithoutCommands() throws IllegalParameterException, InputParserException {
+    StringBuilder inputString = new StringBuilder();
+    inputString.append("5 5")
+               .append("\n")
+               .append("1 2 N")
+               .append("\n")
+               .append("3 3 E");
+
+    Solution solution = SolutionComputer.getSolution(inputString.toString());
+
+    String expectedOutput = "1 2 N\n3 3 E";
+    String output = solution.getFinalSolution();
+
+    assertEquals(expectedOutput, output);
+  }
+  
+  
+  
 }
