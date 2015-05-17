@@ -27,24 +27,25 @@ drawModule = function() {
     };
     return toString;
   };
-  
+
   var drawEmpty = function() {
     svg = d3.select('#svg-container').append('svg')
       .attr('id', 'svg')
       .attr('width', 400)
       .attr('height', 400)
       .attr('viewBox', '0 0 ' + width + ' ' + height + '')
-      .attr('preserveAspectRatio','xMinYMin')
+      .attr('preserveAspectRatio', 'xMinYMin')
       .style('border', '1px solid darkgrey');
-    
-    svg.append('g').append('rect')
-    .attr('x', 0)
-    .attr('y', 0)
-    .attr('width', width)
-    .attr('height', height)
-    .attr('fill', '#fff');
-    
-    makeResponsive();   
+
+    svg.append('g')
+      .append('rect')
+      .attr('x', 0)
+      .attr('y', 0)
+      .attr('width', width)
+      .attr('height', height)
+      .attr('fill', '#fff');
+
+    makeResponsive();
   }
 
   var drawSolution = function(solutionJson) {
@@ -56,47 +57,45 @@ drawModule = function() {
       addToOutput();
     }
   };
-  
+
   var draw = function() {
     initScales();
     initSvg();
     makeResponsive();
     drawField();
-    drawMowersSequence();
+    drawMowersSequence(0);
   };
-  
+
   var makeResponsive = function() {
     var $svg = $('#svg');
-    var $controls = $('#controls');    
+    var $controls = $('#controls');
     $(window).on('resize', function() {
       var targetWidth = $svg.parent().width();
       // if it's too big
       var targetHeight = targetWidth * height / width;
-      
+
       if (targetHeight > maxHeight) {
         targetHeight = maxHeight
         targetWidth = targetHeight * width / height;
       }
-      $svg
-        .attr('width', targetWidth)
-        .attr('height',targetHeight);
+      $svg.attr('width', targetWidth).attr('height', targetHeight);
       $controls.css('width', targetWidth);
     });
-    
+
     $(window).trigger('resize');
   };
-  
+
   var addToOutput = function() {
     $('#output').text(solution.finalSolution);
   };
 
-  var drawMowersSequence = function() {
+  var drawMowersSequence = function(start) {
     $slider = $('#slider-container');
-    
+
     $slider.slider('option', 'max', solution.mowersAtStep.length - 1);
-    
-    $slider.slider('value', 0);  
-    var i = 1;
+
+    $slider.slider('value', start);
+    var i = start+1;
     (function nextStep() {
       setTimeout(function() {
         if (i <= solution.mowersAtStep.length - 1) {
@@ -107,7 +106,7 @@ drawModule = function() {
       }, 250);
     })();
   };
-  
+
   var initScales = function() {
     // we only use the width because we don't mind scrolling vertically but
     // not horizontally and we want squares
@@ -115,18 +114,18 @@ drawModule = function() {
         [ 0, maxWidth ]);
     // reversed y-axis (down/up)
     height = xScale(solution.height + 1);
-    
+
     if (height > maxHeight) {
       xScale = d3.scale.linear().domain([ 0, solution.height + 1 ]).range(
           [ 0, maxWidth ]);
       height = xScale(solution.height + 1);
     }
-    
+
     width = xScale(solution.width + 1);
 
     yScale = d3.scale.linear().domain([ -1, solution.height ]).range(
         [ height, 0 ]);
-    
+
     cellSideLength = xScale(1);
 
     north = scaledPoint(0.5, 0);
@@ -138,18 +137,19 @@ drawModule = function() {
   var initSvg = function() {
 
     $('#svg-container').empty();
-    
-    svg = d3.select('#svg-container').append('svg')
+
+    svg = d3.select('#svg-container')
+      .append('svg')
       .attr('id', 'svg')
       .attr('width', width)
       .attr('height', height)
       .attr('viewBox', '0 0 ' + width + ' ' + height + '')
-      .attr('preserveAspectRatio','xMinYMin');
+      .attr('preserveAspectRatio', 'xMinYMin');
 
     gField = svg.append('g').attr('id', 'gField');
 
     gMowers = svg.append('g').attr('id', 'gMowers');
-    
+
     // borders
     svg.append('rect')
       .attr('x', 0)
@@ -159,39 +159,50 @@ drawModule = function() {
       .attr('fill', 'none')
       .attr('stroke-width', 3)
       .attr('stroke', 'black');
-    
-    tooltip = d3.select('body').append('div')   
-      .attr('class', 'tooltip')               
+
+    tooltip = d3.select('body').append('div')
+      .attr('class', 'tooltip')
       .style('opacity', 0);
-    
+
   };
 
   var initControls = function() {
     var $slider = $('#slider-container');
-    
-    $slider
-      .slider({
-        value : 0,
-        min : 0,
-        max : 1,
-        step : 1,
-        // we have to attach this event to trigger it manually
-        change : function(event, ui) {
-          drawMowers(ui.value);
-        },
-        slide : function(event, ui) {
-          drawMowers(ui.value);
-        }
-     });
-    
-    $('#minus').click(function() {
-      $slider.slider( 'value', $slider.slider('value') - 1 );
+
+    $slider.slider({
+      value : 0,
+      min : 0,
+      max : 1,
+      step : 1,
+      // we have to attach this event to trigger it manually
+      change : function(event, ui) {
+        drawMowers(ui.value);
+      },
+      slide : function(event, ui) {
+        drawMowers(ui.value);
+      }
+    });
+
+    $('#first').click(function() {
+      $slider.slider('value', $slider.slider('option', 'min'));
+    })
+
+    $('#prev').click(function() {
+      $slider.slider('value', $slider.slider('value') - 1);
     })
     
-    $('#plus').click(function() {
-      $slider.slider( 'value', $slider.slider('value') + 1 );
+     $('#play').click(function() {
+       drawMowersSequence($slider.slider('value') + 1);
+     })
+
+    $('#next').click(function() {
+      $slider.slider('value', $slider.slider('value') + 1);
     })
-    
+
+    $('#last').click(function() {
+      $slider.slider('value', $slider.slider('option', 'max'));
+    })
+
   };
 
   var drawField = function() {
@@ -211,22 +222,20 @@ drawModule = function() {
           .on('mouseover', function() {
             var that = d3.select(this);
             var absoluteMousePos = d3.mouse(d3.select('body').node());
-            tooltip
-              .html(that.attr('coord'))
-              .style({
-                opacity: .9,
-                left: (absoluteMousePos[0] + 30)+'px',
-                top: (absoluteMousePos[1])+'px'
-              });  
+            tooltip.html(that.attr('coord')).style({
+              opacity : .9,
+              left : (absoluteMousePos[0] + 30) + 'px',
+              top : (absoluteMousePos[1]) + 'px'
+            });
             that.attr('fill', '#9fdf9f');
-           })
-           .on('mousemove', function() {
-              var absoluteMousePos = d3.mouse(d3.select('body').node());
-              tooltip.style({
-                left: (absoluteMousePos[0] + 30)+'px',
-                top: (absoluteMousePos[1])+'px'
-              });
-           })
+          })
+          .on('mousemove', function() {
+            var absoluteMousePos = d3.mouse(d3.select('body').node());
+            tooltip.style({
+              left : (absoluteMousePos[0] + 30) + 'px',
+              top : (absoluteMousePos[1]) + 'px'
+            });
+          })
           .on('mouseout', function() {
             var that = d3.select(this);
             tooltip.style('opacity', 0);
@@ -250,40 +259,39 @@ drawModule = function() {
     // enter
     var mowersGroupEnter = mowersGroup.enter().append('g')
       .on('mouseover', function() {
-         var that = d3.select(this);
-         var absoluteMousePos = d3.mouse(d3.select('body').node());
-         tooltip
-           .html(that.attr('representation'))
-           .style({
-             opacity: .9,
-             left: (absoluteMousePos[0] + 30)+'px',
-             top: (absoluteMousePos[1])+'px'
-           });  
-         that.selectAll('rect').attr('fill', '#ff6767');
-        })
-        .on('mousemove', function() {
-           var absoluteMousePos = d3.mouse(d3.select('body').node());
-           tooltip.style({
-             left: (absoluteMousePos[0] + 30)+'px',
-             top: (absoluteMousePos[1])+'px'
-           });
-        })
-       .on('mouseout', function() {
-         var that = d3.select(this);
-         tooltip.style('opacity', 0);
-         that.selectAll('rect').attr('fill', 'red');
-       });
+        var that = d3.select(this);
+        var absoluteMousePos = d3.mouse(d3.select('body').node());
+        tooltip.html(that.attr('representation')).style({
+          opacity : .9,
+          left : (absoluteMousePos[0] + 30) + 'px',
+          top : (absoluteMousePos[1]) + 'px'
+        });
+        that.selectAll('rect').attr('fill', '#ff6767');
+      })
+      .on('mousemove', function() {
+        var absoluteMousePos = d3.mouse(d3.select('body').node());
+        tooltip.style({
+          left : (absoluteMousePos[0] + 30) + 'px',
+          top : (absoluteMousePos[1]) + 'px'
+        });
+      })
+      .on('mouseout', function() {
+        var that = d3.select(this);
+        tooltip.style('opacity', 0);
+        that.selectAll('rect').attr('fill', 'red');
+      });
 
     // update
     mowersGroup
-      .attr('representation', function(d) {return '(' + d.coordinate.x + ',' + d.coordinate.y + ',' + d.direction.charAt(0) + ')';})
+      .attr('representation', function(d) {
+        return '(' + d.coordinate.x + ',' + d.coordinate.y + ','
+          + d.direction.charAt(0) + ')';
+        })
       .transition()
-      .attr(
-        'transform',
-        function(mower) {
-          return 'translate(' + xScale(mower.coordinate.x) + ','
-              + yScale(mower.coordinate.y) + ')';
-        });
+      .attr('transform', function(mower) {
+        return 'translate(' + xScale(mower.coordinate.x) + ','
+          + yScale(mower.coordinate.y) + ')';
+       });
 
     // enter
     mowersGroupEnter.append('rect')
@@ -309,7 +317,6 @@ drawModule = function() {
       .attr('points', function(mower) {
         return getTriangleFromDirection(mower.direction);
       });
-
   };
 
   var getTriangleFromDirection = function(direction) {
@@ -341,42 +348,37 @@ drawModule = function() {
 }();
 
 ajaxModule = function() {
-  
+
   var init = function() {
     $('#button-input').click(function() {
       postInput($('#input').val());
     });
     $('#input').text(
-          '5 5\n'
-        + '1 2 N\n'
-        + 'GAGAGAGAA\n'
-        + '3 3 E\n'
-        + 'AADAADADDA'
-    );
+        '5 5\n' + '1 2 N\n' + 'GAGAGAGAA\n' + '3 3 E\n' + 'AADAADADDA');
   };
-  
+
   var postInput = function(input) {
     var input = $('#input').val();
     $.ajax({
-      url: './Mow',
-      type: 'POST',
-      data: {
-          input: input
+      url : './Mow',
+      type : 'POST',
+      data : {
+        input : input
       },
-      cache: false,
-      success: function(json) {
+      cache : false,
+      success : function(json) {
         drawModule.drawSolution(json);
       },
-      error: function(e) {
+      error : function(e) {
         $('#output').text('An unexpected error occured : ' + e.message);
       }
     });
   };
-  
+
   return {
     init : init
   };
-  
+
 }();
 
 $(function() {

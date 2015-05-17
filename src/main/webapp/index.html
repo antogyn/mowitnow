@@ -2,12 +2,16 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+<meta name="viewport"
+  content="width=device-width, initial-scale=1, maximum-scale=1" />
 <title>MowItNow</title>
 <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />
 <link rel="stylesheet" type="text/css" href="css/jquery-ui.min.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery-ui.structure.min.css" />
-<link rel="stylesheet" type="text/css" href="css/jquery-ui.theme.min.css" />
+<link rel="stylesheet" type="text/css"
+  href="css/jquery-ui.structure.min.css" />
+<link rel="stylesheet" type="text/css"
+  href="css/jquery-ui.theme.min.css" />
+<link rel="stylesheet" type="text/css" href="css/font-awesome.min.css" />
 <link rel="stylesheet" type="text/css" href="css/mowitnow.css" />
 <script charset="utf-8" src="js/d3.min.js"></script>
 <script charset="utf-8" src="js/jquery-2.1.1.js"></script>
@@ -31,7 +35,8 @@
         <li><a id="last-nav"
           href="https://github.com/antogyn/mowitnow" target="_blank">GitHub</a></li>
       </ul>
-    </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.container-fluid -->
   </nav>
 
   <div class="container">
@@ -59,12 +64,32 @@
           <div id="svg-container"></div>
           <div id="controls">
             <div id="slider-container"></div>
-            <div class="btn-group btn-group-justified" role="group" id="minus-plus-container">
+            <div class="btn-group btn-group-justified" role="group"
+              id="prev-next-container">
               <div class="btn-group" role="group">
-                <button id="minus" type="button" class="btn btn-primary">-</button>
+                <button id="first" type="button" class="btn btn-primary">
+                  <i class="fa fa-fast-backward"></i>
+                </button>
               </div>
               <div class="btn-group" role="group">
-                <button id="plus" type="button" class="btn btn-primary">+</button>
+                <button id="prev" type="button" class="btn btn-primary">
+                  <i class="fa fa-backward"></i>
+                </button>
+              </div>
+              <div class="btn-group" role="group">
+                <button id="play" type="button" class="btn btn-primary">
+                  <i class="fa fa-play"></i>
+                </button>
+              </div>
+              <div class="btn-group" role="group">
+                <button id="next" type="button" class="btn btn-primary">
+                  <i class="fa fa-forward"></i>
+                </button>
+              </div>
+              <div class="btn-group" role="group">
+                <button id="last" type="button" class="btn btn-primary">
+                  <i class="fa fa-fast-forward"></i>
+                </button>
               </div>
             </div>
           </div>
@@ -84,7 +109,8 @@
             aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
-          <h4 class="modal-title" id="myModalLabel">Instructions (French)</h4>
+          <h4 class="modal-title" id="myModalLabel">Instructions
+            (French)</h4>
         </div>
         <div class="modal-body">
           <p>La société MowItNow a décidé de développer une tondeuse

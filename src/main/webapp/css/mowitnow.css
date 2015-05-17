@@ -50,16 +50,31 @@ svg {
   width: 100%;
 }
 
-#minus-plus-container {
-  margin-top: 4px;
+#prev-next-container {
+  margin-top: 6px;
   width: 100%;
 }
 
-#minus {
+#controls {
+  margin-top: 2px;
+}
+
+#controls button {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+#controls > div.btn-group > div.btn-group:not(:last-child) > button {
   border-right-color: #DAE3E7;
 }
 
-#plus {
+.ui-widget-content .ui-state-default {
+  border: none;
+  background: #354b60;
+}
+
+.ui-widget-content {
+  border: 1px solid #476481;
 }
 
 /****** Remove collapse *****/
