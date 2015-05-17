@@ -46,6 +46,18 @@ svg {
   padding-right: 30px;
 }
 
+#minus-plus-container {
+  margin-top: 8px;
+  width: 100%;
+}
+
+#minus {
+  border-right-color: #DAE3E7;
+}
+
+#plus {
+}
+
 /****** Remove collapse *****/
 .navbar-collapse.collapse {
   display: block !important;

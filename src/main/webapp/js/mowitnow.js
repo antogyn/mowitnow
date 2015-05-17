@@ -60,7 +60,7 @@ drawModule = function() {
   var draw = function() {
     initScales();
     initSvg();
-    initSlider();
+    initControls();
     makeResponsive();
     drawField();
     drawMowersSequence();
@@ -68,7 +68,7 @@ drawModule = function() {
   
   var makeResponsive = function() {
     var $svg = $("#svg");
-    var $slider = $("#slider-container");    
+    var $controls = $("#controls");    
     $(window).on("resize", function() {
       var targetWidth = $svg.parent().width();
       // if it's too big
@@ -81,7 +81,7 @@ drawModule = function() {
       $svg
         .attr("width", targetWidth)
         .attr("height",targetHeight);
-      $slider.css("width", targetWidth);
+      $controls.css("width", targetWidth);
     });
     
     $(window).trigger("resize");
@@ -94,13 +94,12 @@ drawModule = function() {
   var drawMowersSequence = function() {
     $slider = $('#slider-container');
     $slider.slider("value", 0);
-    $slider.trigger("slidechange");
+//    $slider.trigger("slidechange");
     var i = 1;
     (function nextStep() {
       setTimeout(function() {
         if (i <= solution.mowersAtStep.length - 1) {
           $slider.slider("value", i);
-          $slider.trigger("slidechange");
           i++;
           nextStep();
         }
@@ -166,24 +165,31 @@ drawModule = function() {
     
   };
 
-  var initSlider = function() {
-    $("#slider-container")
+  var initControls = function() {
+    var $slider = $("#slider-container");
+    
+    $slider
       .slider({
         value : 0,
         min : 0,
         max : solution.mowersAtStep.length - 1,
         step : 1,
-        width : width,
         // we have to attach this event to trigger it manually
-        // (because of a bug in jquery-ui)
         change : function(event, ui) {
           drawMowers(ui.value);
         },
         slide : function(event, ui) {
           drawMowers(ui.value);
         }
-      })
-     .css("width", width);
+     });
+    
+    $("#minus").click(function() {
+      $slider.slider( "value", $slider.slider("value") - 1 );
+    })
+    
+    $("#plus").click(function() {
+      $slider.slider( "value", $slider.slider("value") + 1 );
+    })
     
   };
 
