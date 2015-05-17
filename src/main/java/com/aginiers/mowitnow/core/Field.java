@@ -31,21 +31,34 @@ public class Field {
     this.height = height;
   }
 
+  /**
+   * Appends a mower to the end of the list of mowers.
+   * 
+   * @param mower the mower to add
+   * @throws IllegalParameterException if the coordinates of the mower are impossible
+   */
   public void addMower(Mower mower) throws IllegalParameterException {
-    int x = mower.getCoordinate().getX();
-    int y = mower.getCoordinate().getY();
-    
+    int x = mower.getCoordinate()
+                 .getX();
+    int y = mower.getCoordinate()
+                 .getY();
+
     if (x > width) {
       throw new IllegalParameterException(x, "a value below the width of the field");
     }
 
-    if (y > width) {
+    if (y > height) {
       throw new IllegalParameterException(y, "a value below the height of the field");
     }
 
     this.mowers.add(mower);
   }
 
+  /**
+   * Moves the last mower of the list of mowers.
+   * @param command the command to dispatch
+   * @throws IllegalParameterException
+   */
   public void moveLastMower(Command command) throws IllegalParameterException {
     mowers.get(mowers.size() - 1)
           .move(command, width, height);

@@ -3,6 +3,7 @@ package com.aginiers.mowitnow.core.parser;
 import java.util.regex.Pattern;
 
 /**
+ * An exception thrown when the format of the input does not match the patterns defined in the parser.
  * 
  * @author aginiers
  *

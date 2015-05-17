@@ -1,5 +1,13 @@
 package com.aginiers.mowitnow.servlet;
 
+import com.google.gson.Gson;
+
+/**
+ * A simple class used to send errors in Ajax.
+ * 
+ * @author aginiers.
+ *
+ */
 public class ErrorJson {
 
   private String error;
@@ -10,6 +18,10 @@ public class ErrorJson {
 
   public String getError() {
     return error;
+  }
+  
+  public String toJson() {
+    return new Gson().toJson(this);
   }
 
 }

@@ -3,17 +3,18 @@ package com.aginiers.mowitnow.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gson.Gson;
+
 /**
- * A POJO containing the final solution.
+ * Contains the final solution.
  * <p>
  * It also stores a list of mowers for each step of the computation.
  * <p>
  * A new step corresponds to :
  * <ul>
- * <li>The initialization of the field (empty list)</li>
- * <li>The addition of a mower</li>
- * <li>The dispatch of a command to a mower</li>
- * </ul>
+ * <li>The initialization of the field (empty list)
+ * <li>The addition of a mower
+ * <li>The dispatch of a command to a mower
  * 
  * @author aginiers
  *
@@ -70,6 +71,10 @@ public class Solution {
 
   public void setFinalSolution(String finalSolution) {
     this.finalSolution = finalSolution;
+  }
+  
+  public String toJson() {
+    return new Gson().toJson(this);
   }
 
 }

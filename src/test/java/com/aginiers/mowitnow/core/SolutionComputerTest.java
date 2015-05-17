@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import com.aginiers.mowitnow.core.parser.InputParserException;
-import com.google.gson.Gson;
 
 public class SolutionComputerTest {
 
@@ -23,8 +22,6 @@ public class SolutionComputerTest {
                .append("AADAADADDA");
 
     Solution solution = SolutionComputer.getSolution(inputString.toString());
-    
-    System.out.println(new Gson().toJson(solution));
 
     String expectedOutput = "1 3 N\n5 1 E";
     String output = solution.getFinalSolution();

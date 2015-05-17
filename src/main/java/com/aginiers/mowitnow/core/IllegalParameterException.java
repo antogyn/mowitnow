@@ -1,6 +1,7 @@
 package com.aginiers.mowitnow.core;
 
 /**
+ * An exception thrown when an impossible parameter is passed to a method or constructor.
  * 
  * @author aginiers
  *
