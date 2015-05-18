@@ -171,10 +171,12 @@ drawModule = function() {
       .attr('stroke-width', 3)
       .attr('stroke', 'black');
 
+  };
+  
+  var initTooltip = function() {
     tooltip = d3.select('body').append('div')
       .attr('class', 'tooltip')
       .style('opacity', 0);
-
   };
 
   var initControls = function() {
@@ -355,7 +357,8 @@ drawModule = function() {
   return {
     drawEmpty : drawEmpty,
     drawSolution : drawSolution,
-    initControls : initControls
+    initControls : initControls,
+    initTooltip : initTooltip
   };
 
 }();
@@ -397,5 +400,6 @@ ajaxModule = function() {
 $(function() {
   ajaxModule.init();
   drawModule.initControls();
+  drawModule.initTooltip();
   drawModule.drawEmpty();
 });
