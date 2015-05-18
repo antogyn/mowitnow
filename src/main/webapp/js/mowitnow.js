@@ -12,6 +12,7 @@ drawModule = function() {
   var gField = null;
   var gMowers = null;
   var tooltip = null;
+  var sequenceTimeout = null;
 
   // points in a cell
   var north = null;
@@ -97,7 +98,7 @@ drawModule = function() {
     $slider.slider('value', start);
     var i = start+1;
     (function nextStep() {
-      setTimeout(function() {
+      sequenceTimeout = setTimeout(function() {
         if (i <= solution.mowersAtStep.length - 1) {
           $slider.slider('value', i);
           i++;
@@ -176,9 +177,11 @@ drawModule = function() {
       step : 1,
       // we have to attach this event to trigger it manually
       change : function(event, ui) {
+        clearTimeout(sequenceTimeout);
         drawMowers(ui.value);
       },
       slide : function(event, ui) {
+        clearTimeout(sequenceTimeout);
         drawMowers(ui.value);
       }
     });
