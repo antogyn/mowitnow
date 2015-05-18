@@ -30,6 +30,8 @@ drawModule = function() {
   };
 
   var drawEmpty = function() {
+    $('#svg-container').empty();
+    
     svg = d3.select('#svg-container').append('svg')
       .attr('id', 'svg')
       .attr('width', 400)
@@ -54,17 +56,25 @@ drawModule = function() {
     if (solution.hasOwnProperty('error')) {
       $('#output').text(solution.error);
     } else {
-      draw();
       addToOutput();
+      draw();
     }
   };
 
   var draw = function() {
-    initScales();
-    initSvg();
-    makeResponsive();
-    drawField();
-    drawMowersSequence(0);
+    if (solution.width * solution.height <= 10000) { 
+      initScales();
+      initSvg();
+      makeResponsive();
+      drawField();
+      drawMowersSequence(0);
+    } else {
+      drawEmpty();
+      svg.append('text')
+        .attr('x', 20)
+        .attr('y', 40)
+        .text('The field is too big to be drawn (10000 cells max).');
+    }
   };
 
   var makeResponsive = function() {
